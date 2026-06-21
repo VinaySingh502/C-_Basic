@@ -10,7 +10,7 @@ internal class Program
         Console.WriteLine("=== C# Learning Console App ===\n");
 
         // 1. Variables and data types
-        string learnerName = "Vinay";
+        string learnerName = "Vinay Singh";
         int age = 25;
         double courseProgress = 42.5;
         bool enjoysCSharp = true;

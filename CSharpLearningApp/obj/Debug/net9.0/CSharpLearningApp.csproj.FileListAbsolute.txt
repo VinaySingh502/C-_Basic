@@ -1,0 +1,14 @@
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.exe
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.deps.json
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.runtimeconfig.json
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.dll
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.pdb
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.AssemblyInfoInputs.cache
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.AssemblyInfo.cs
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.csproj.CoreCompileInputs.cache
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.dll
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\refint\CSharpLearningApp.dll
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.pdb
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.genruntimeconfig.cache
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\ref\CSharpLearningApp.dll

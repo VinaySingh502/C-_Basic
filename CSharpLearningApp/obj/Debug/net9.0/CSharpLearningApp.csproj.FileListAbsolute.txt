@@ -1,6 +1,4 @@
-D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.exe
 D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.deps.json
-D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.runtimeconfig.json
 D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.dll
 D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.pdb
 D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.GeneratedMSBuildEditorConfig.editorconfig
@@ -10,5 +8,8 @@ D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.cs
 D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.dll
 D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\refint\CSharpLearningApp.dll
 D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.pdb
-D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.genruntimeconfig.cache
 D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\ref\CSharpLearningApp.dll
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.sourcelink.json
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.exe
+D:\AzureProject\C#_Basic\CSharpLearningApp\bin\Debug\net9.0\CSharpLearningApp.runtimeconfig.json
+D:\AzureProject\C#_Basic\CSharpLearningApp\obj\Debug\net9.0\CSharpLearningApp.genruntimeconfig.cache

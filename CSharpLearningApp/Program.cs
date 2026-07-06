@@ -1,11 +1,20 @@
 using System;
 
 namespace CSharpLearningApp;
-internal class Program
+public class Program
 {
-    private static void Main()
+    private static void Main(string[] args)
     {
-        // TODO: Write your custom test or execution code here!
-        ApiConfig apiConfig = new ApiConfig("vinay",30);
+        var obj = AppLogger.GetInstance("ShopApp");
+        UserService user = new UserService();
+        OrderService order = new OrderService();
+        PaymentService payment = new PaymentService();
+
+        user.login("vinay");
+        order.PlaceOrder("Iphone");
+        payment.ProcessPayment(1000);
+        user.logout("vinay");
+        obj.PrintSummary();
+
     }
 }

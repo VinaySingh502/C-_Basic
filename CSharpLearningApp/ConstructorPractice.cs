@@ -1,136 +1,295 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CSharpLearningApp;
 
-// ════════════════════════════════════════════════════════════════
-//             CONSTRUCTORS PRACTICE CHALLENGES
-// ════════════════════════════════════════════════════════════════
-// Complete the tasks below by writing your code in each class skeleton.
-// Once done, select option 12 in the program menu to verify your work!
-// ════════════════════════════════════════════════════════════════
 
-// ──────────────────────────────────────────────────────────────
-// TASK 4: REAL-WORLD API CONFIGURATION (CHAINING)
-// ──────────────────────────────────────────────────────────────
+
+// ══════════════════════════════════════════════════════════════════
+// TASK 11: SINGLETON LOGGER — REAL E-COMMERCE APP SIMULATION
+// ══════════════════════════════════════════════════════════════════
+// Scenario:
+//   A shopping app has 3 modules: UserService, OrderService, PaymentService.
+//   ALL 3 must write to the SAME single logger.
+//   If each had its own logger, logs would be split and incomplete.
+//
+// ── PART A: AppLogger (Singleton) ────────────────────────────────
 // Requirements:
-// 1. In the 'ApiConfig' class, declare properties:
-//    - 'Endpoint' (string)
-//    - 'TimeoutSeconds' (int)
-//    - 'MaxRetries' (int)
-// 2. Create a Master Parameterized Constructor that initializes all 3 properties.
-// 3. Create a Parameterless Constructor that chains to the master constructor
-//    setting Endpoint to "https://api.default.com", TimeoutSeconds to 30, and MaxRetries to 3.
-// 4. Create a Constructor accepting Endpoint & TimeoutSeconds that chains to the master constructor
-//    setting MaxRetries to 3.
-// ──────────────────────────────────────────────────────────────
-public class ApiConfig
+// 1. Declare in 'AppLogger':
+//    - '_instance'  private static AppLogger
+//    - 'AppName'    public string  (read-only after creation)
+//    - 'LogCount'   public int     (starts at 0, auto-increments)
+//
+// 2. Private Constructor accepting 'appName':
+//    - Sets AppName
+//    - Prints: "✅ Logger created for: [appName]"
+//    - Prints: "─────────────────────────────────"
+//
+// 3. Static method 'GetInstance(string appName = "MyApp")':
+//    - Creates instance ONLY if null
+//    - Returns same instance every time
+//
+// 4. Method 'Log(string module, string message)':
+//    - Increments LogCount
+//    - Prints: "[LOG #LogCount] [module] message"
+//
+// 5. Method 'PrintSummary()':
+//    - Prints: "─────────────────────────────────"
+//    - Prints: "App: [AppName]"
+//    - Prints: "Total Logs Written: [LogCount]"
+//
+// ── PART B: Service Modules ───────────────────────────────────────
+// Each service gets the logger via GetInstance() — NOT a new one!
+//
+// 6. Class 'UserService':
+//    - Field: '_logger' = AppLogger.GetInstance()
+//    - Method 'Login(string username)'  → logs "User '[username]' logged in"
+//    - Method 'Logout(string username)' → logs "User '[username]' logged out"
+//
+// 7. Class 'OrderService':
+//    - Field: '_logger' = AppLogger.GetInstance()
+//    - Method 'PlaceOrder(string item)' → logs "Order placed for: [item]"
+//
+// 8. Class 'PaymentService':
+//    - Field: '_logger' = AppLogger.GetInstance()
+//    - Method 'ProcessPayment(double amount)' → logs "Payment processed: ₹[amount]"
+//
+// ── PART C: Test in Program.cs ────────────────────────────────────
+// After writing all classes, test in Program.cs:
+//    AppLogger logger = AppLogger.GetInstance("ShopApp");
+//    UserService    user    = new UserService();
+//    OrderService   order   = new OrderService();
+//    PaymentService payment = new PaymentService();
+//    user.Login("Vinay");
+//    order.PlaceOrder("iPhone 15");
+//    payment.ProcessPayment(79999);
+//    user.Logout("Vinay");
+//    logger.PrintSummary();   // Total Logs Written: 4
+// ══════════════════════════════════════════════════════════════════
+
+// TODO: AppLogger class (Singleton)
+public class AppLogger
 {
-    // TODO: Declare properties
-
-    public string Endpoint {get;set;}
-    public int TimeoutSeconds {get;set;}
-    public int MaxRetries {get;set;}
-
-
-    public ApiConfig(string endpoint ,int timeoutSeconds,int maxretries )
-    {
-        this.Endpoint = endpoint;
-        this.TimeoutSeconds = timeoutSeconds;
-        this.MaxRetries = maxretries;
-
-        Console.WriteLine("this is master constrcutors");
-    }
-
-    public ApiConfig(string endpoint,int timeoutSeconds) : this(endpoint,timeoutSeconds,3)
-    {
-        Console.WriteLine("this is 2 parameters constructors ");
-    }
-
-    public ApiConfig() : this("https://api.default.com",30,3)
-    {
-        Console.WriteLine("this is paramterless constrcutors");
-    }
+    // TODO: _instance, AppName, LogCount
+     
+     private static AppLogger _instance ;  
+     public readonly string AppName;
+     public int LogCount;
     
+
+     
+    // TODO: Private Constructor (accepts appName)
+    
+    private AppLogger(string appName)
+    {   
+        AppName = appName;
+        Console.WriteLine($"Prints:Logger created for: {appName}");
+        Console.WriteLine($"─────────────────────────────────");
+    } 
+
+      
+    public static AppLogger GetInstance(string appName = "MyApp")
+    {
+        if(_instance == null)
+        {
+            _instance = new AppLogger(appName);
+        }
+        return _instance;
+    }
+
+    public void Log(string module,string message)
+    {
+        LogCount += 1;
+        Console.WriteLine($"[LOG # {LogCount}] {module} {message}");
+    }
+
+    public void PrintSummary()
+    {
+          Console.WriteLine("─────────────────────────────────");
+          Console.WriteLine($"App {AppName}");
+          Console.WriteLine($"Total Logs Written: {LogCount}");
+    }
+
 }
 
-// ──────────────────────────────────────────────────────────────
-// TASK 5: REAL-WORLD USER ACCOUNT CREATION (CHAINING & VALIDATION)
-// ──────────────────────────────────────────────────────────────
-// Requirements:
-// 1. In the 'UserAccount' class, declare properties:
-//    - 'Username' (string)
-//    - 'Email' (string)
-//    - 'Role' (string)
-//    - 'IsActive' (bool)
-// 2. Create a Master Parameterized Constructor that initializes all 4 properties.
-//    - IMPORTANT: If 'username' or 'email' is null or empty/whitespace, throw an 'ArgumentException'.
-// 3. Create a Constructor accepting Username & Email that chains to the master constructor
-//    setting Role to "Standard" and IsActive to true.
-// 4. Create a Constructor accepting Username, Email & Role that chains to the master constructor
-//    setting IsActive to true.
-// ──────────────────────────────────────────────────────────────
-public class UserAccount
+// TODO: UserService class
+public class UserService
 {
-    // TODO: Declare properties
-
-    public string Username {get;set;}
-    public string Email {get;set;}
-    public string Role {get;set;}
-    public bool IsActive {get;set;}
-
-    public UserAccount(string username,string email,string role,bool isactive)
+    private AppLogger _logger = AppLogger.GetInstance();
+    public void login(string Username)
     {
-        if(!string.IsNullOrWhiteSpace(username)|| !string.IsNullOrWhiteSpace(email))
+       _logger.Log("UserService",$"logs User {Username} logged in");
+    } 
+
+    public void logout(string username)
+    {
+        _logger.Log("UserService",$"logs User {username} logged out");
+    }
+}
+
+// TODO: OrderService class
+public class OrderService
+{
+   private AppLogger _logger = AppLogger.GetInstance();
+
+    public void PlaceOrder(string item)
+    {
+        _logger.Log("OrderService",$"Order placed for: {item}");
+    }
+}
+
+// TODO: PaymentService class
+public class PaymentService
+{
+  private AppLogger _logger = AppLogger.GetInstance();
+  public void ProcessPayment(double amount)
+    {
+        _logger.Log("PaymentService",$"Payment processed: ₹{amount}");    
+    }  
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TASK 12: SINGLETON CACHE MANAGER — INTERVIEW LEVEL
+// ══════════════════════════════════════════════════════════════════
+// Scenario:
+//   An e-commerce app has ProductService and UserService.
+//   Both need to read/write to a SHARED in-memory cache.
+//   Without Singleton — each service has its own cache (data splits!).
+//   With Singleton — ONE cache shared by ALL services.
+//
+// ── PART A: CacheManager (Singleton) ─────────────────────────────
+// 1. Declare in 'CacheManager':
+//    - '_instance'   private static CacheManager
+//    - '_cache'      private Dictionary<string, string>
+//                    (key = item name, value = item data)
+//    - 'HitCount'    public int  (how many times cache was READ)
+//
+// 2. Private Constructor:
+//    - Initializes _cache as new Dictionary<string, string>()
+//    - Sets HitCount to 0
+//    - Prints: "CacheManager initialized ✅"
+//
+// 3. Static 'GetInstance()' method (no params):
+//    - Standard Singleton null check + return
+//
+// 4. Method 'Add(string key, string value)':
+//    - Adds key/value to _cache
+//    - Prints: "Cached: [key] = [value]"
+//
+// 5. Method 'Get(string key)':
+//    - Increments HitCount
+//    - If key exists → prints "Cache HIT [HitCount]: [key] = [value]" → returns value
+//    - If not exists → prints "Cache MISS: [key] not found" → returns null
+//
+// 6. Method 'PrintStats()':
+//    - Prints: "Total Items Cached: [_cache.Count]"
+//    - Prints: "Total Cache Hits: [HitCount]"
+//
+// ── PART B: Services that USE the Cache ──────────────────────────
+// 7. Class 'ProductService':
+//    - Gets CacheManager via GetInstance()
+//    - Method 'GetProduct(string name)':
+//        → Tries cache first with Get(name)
+//        → If null (miss) → simulates DB fetch: Add(name, "₹79999") and returns "₹79999"
+//        → If found (hit) → returns cached value directly
+//
+// 8. Class 'PriceService':
+//    - Gets CacheManager via GetInstance()
+//    - Method 'GetPrice(string item)':
+//        → Same pattern — check cache first, add if missing
+//
+// ── PART C: Test in Program.cs ────────────────────────────────────
+//    var ps  = new ProductService();
+//    var prs = new PriceService();
+//    ps.GetProduct("iPhone");    // MISS → fetches from DB → caches
+//    ps.GetProduct("iPhone");    // HIT  → from cache
+//    prs.GetPrice("iPhone");     // HIT  → PriceService reads ProductService's cache!
+//    CacheManager.GetInstance().PrintStats();
+//    // Total Items Cached: 1 | Total Cache Hits: 2
+// ══════════════════════════════════════════════════════════════════
+public class CacheManager
+{
+    private static CacheManager _instance;
+    private Dictionary<string ,string> _cache;
+
+    private int HitCount;
+
+    private CacheManager()
+    {
+        _cache = new Dictionary<string, string>();
+        HitCount = 0;
+    }
+
+    public static CacheManager GetInstance()
+    {
+        if(_instance == null)
         {
-        this.Email = email;
-        this.Username = username;
-        this.Role= role;
-        this.IsActive = isactive;
+            _instance = new CacheManager ();
+        }
+        return _instance;
+    }
+
+    public void Add(string key , string value)
+    {
+        _cache.Add(key,value);
+        Console.WriteLine($"Cached: {key}  {value}");
+    }
+
+    public string Get(string key)
+    {
+
+foreach (var item in _cache)
+        {
+         item.Key[0].Equals("data");
+        }
+
+        if(_cache.ContainsKey(""))
+        {
+                   HitCount += 1;
+                   Console.WriteLine($"Cache HIT {HitCount} : {_cache.Keys} = {_cache.Values}");
+                   return _cache.Values.ToString();
         }
         else
-            throw new ArgumentException("can not null of username and email");
-         
-    
+        {
+         Console.WriteLine($"Cache HIT :{key} not found");
+          return null;
+        }
     }
 
-    public UserAccount(string username,string email) : this(username,email,"Standard",true)
+    public void PrintStats()
     {
-        Console.WriteLine("Initialize construcutor 2 parameterized constracutor");
+        Console.WriteLine($"Total Item Cached {_cache.Count}");
+        Console.WriteLine($"Total Cache Hits:{HitCount}");
     }
-
-    public UserAccount(string username,string email,string role): this(username, email, role, true)
-    {
-        Console.WriteLine("Initiallize constructors 3 parameters constracutor");
-    }
-
 }
 
-// ──────────────────────────────────────────────────────────────
-// TASK 6: COPY CONSTRUCTOR — PRODUCT INVENTORY
-// ──────────────────────────────────────────────────────────────
-// Requirements:
-// 1. In the 'Product' class, declare these properties:
-//    - 'Name'     (string)
-//    - 'Price'    (double)
-//    - 'Category' (string)
-//    - 'InStock'  (bool)
-//
-// 2. Create a Master Constructor that initializes all 4 properties.
-//
-// 3. Create a Copy Constructor that accepts a 'Product' object
-//    and copies all its property values into the new object.
-//
-// 4. After copying, the two objects must be INDEPENDENT —
-//    changing one must NOT affect the other.
-// ──────────────────────────────────────────────────────────────
-public class Product
+public class ProductService
+{ 
+    public string GetProduct(string name)
+    {
+     var data = CacheManager.GetInstance().Get(name);
+        if(data == null)
+        {
+           data = "₹79999"; 
+           CacheManager.GetInstance().Add(name,data);
+        }
+
+        return data;
+    }
+}
+
+
+public class PriceService
 {
-    // TODO: Declare 4 properties (Name, Price, Category, InStock)
+   public string GetPrice(string item)
+    {
+         var data = CacheManager.GetInstance().Get(item);
+        if(data == null)
+        {
+           data = "₹79999"; 
+           CacheManager.GetInstance().Add(item,data);
+        }
 
-
-    // TODO: Master Constructor — initializes all 4 properties
-
-
-    // TODO: Copy Constructor — accepts a Product object, copies all properties
-
+        return data;
+    }
 }

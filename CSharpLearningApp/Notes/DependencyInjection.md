@@ -1,9 +1,15 @@
-# Dependency Injection (DI) — Quick Reference Guide
+# Dependency Injection (DI) — Complete 3-Type Reference Guide
 
 ---
 
-## 💻 1. Full C# Code
+## 1️⃣ Constructor Injection (95% Industry Standard)
 
+### 📖 Explanation:
+* **How it works:** The dependency is passed through the class **constructor**.
+* **When to use:** For **required dependencies** that the class cannot live without.
+* **Analogy:** Buying a car that requires an Engine right at the time of manufacturing.
+
+### 💻 Full Code Example:
 ```csharp
 using System;
 
@@ -22,18 +28,11 @@ public class HeadphonesOutput : IAudioOutput
     }
 }
 
-public class BluetoothSpeakerOutput : IAudioOutput
-{
-    public void PlayAudio(string songTitle)
-    {
-        Console.WriteLine($"🔊 Playing '{songTitle}' loudly through Bluetooth Speaker!");
-    }
-}
-
 public class AudioPlayerService
 {
     private readonly IAudioOutput _audioOutput;
 
+    // ✅ CONSTRUCTOR INJECTION: Injected when creating AudioPlayerService
     public AudioPlayerService(IAudioOutput audio)
     {
         _audioOutput = audio;
@@ -45,69 +44,157 @@ public class AudioPlayerService
     }
 }
 
+// Program.cs:
 public class Program
 {
     public static void Main(string[] args)
     {
         IAudioOutput headphone = new HeadphonesOutput();
-        AudioPlayerService playerService = new AudioPlayerService(headphone);
-        playerService.PlaySong("Hotel California");
+        AudioPlayerService player = new AudioPlayerService(headphone); // Injected in Constructor!
+        player.PlaySong("Hotel California");
     }
 }
 ```
 
 ---
 
-## 🔍 2. Line-by-Line Breakdown & Analogy
+## 2️⃣ Property Injection (Setter Injection)
 
-### Line 1: `IAudioOutput headphone = new HeadphonesOutput();`
-* **What happens:** Creates the `HeadphonesOutput` object in RAM, typed under the Interface contract (`IAudioOutput`).
-* **Why use Interface on left side:** Tells C# *"I don't care about the brand, only that it obeys the contract."*
-* **Analogy:** You buy a pair of Headphones and put them on the table.
+### 📖 Explanation:
+* **How it works:** The dependency is assigned to a **public Property (`get; set;`)** *after* the class is created.
+* **When to use:** For **optional dependencies** that have a safe default fallback.
+* **Analogy:** Think of a Smartphone with a built-in speaker:
+If you don't plug in anything, sound plays through the default built-in speaker.
+If you want, you can attach a Headphone (Property) to override the default speaker.
 
-```text
-[ RAM Memory ]
-Heap:  [ HeadphonesOutput Object ]  <--- headphone (IAudioOutput contract)
-```
-
----
-
-### Line 2: `AudioPlayerService playerService = new AudioPlayerService(headphone);`
-* **What happens:** **The Injection Step.** Passes `headphone` into `AudioPlayerService`'s constructor.
-* **Behind the scenes:** `_audioOutput` field saves the `headphone` object reference.
-* **Analogy:** You plug the Headphones cable into the Music Player slot.
-
-```text
-[ RAM Memory Connection ]
-[ AudioPlayerService Object ] ---> _audioOutput field ---> [ HeadphonesOutput Object ]
-```
-
----
-
-### Line 3: `playerService.PlaySong("Hotel California");`
-* **What happens:** `AudioPlayerService` calls `_audioOutput.PlayAudio("Hotel California")`.
-* **Result:** `🎧 Playing 'Hotel California' in high quality through Headphones!`
-
----
-
-### 🔌 Swapping Dependencies:
-To switch to Bluetooth Speaker, only change Line 1 & Line 2 in `Program.cs`. **`AudioPlayerService.cs` is NEVER modified!**
-
+### 💻 Full Code Example:
 ```csharp
-IAudioOutput speaker = new BluetoothSpeakerOutput();
-AudioPlayerService playerService = new AudioPlayerService(speaker);
+using System;
+
+namespace CSharpLearningApp;
+
+public interface IPrinterDevice
+{
+    void Print(string documentName);
+}
+
+public class StandardPrinter : IPrinterDevice
+{
+    public void Print(string documentName)
+    {
+        Console.WriteLine($"🖨️ Standard B&W Print: {documentName}");
+    }
+}
+
+public class PhotoPrinter : IPrinterDevice
+{
+    public void Print(string documentName)
+    {
+        Console.WriteLine($"🖼️ High-Gloss Color Photo Print: {documentName}");
+    }
+}
+
+public class DocumentService
+{
+    // ✅ PROPERTY INJECTION: Defaults to StandardPrinter if not set by caller!
+    public IPrinterDevice Printer { get; set; } = new StandardPrinter();
+
+    public void ProcessDocument(string documentName)
+    {
+        Printer.Print(documentName);
+    }
+}
+
+// Program.cs:
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        DocumentService docService = new DocumentService();
+
+        // Usage A: Uses Default Property Printer (StandardPrinter)
+        docService.ProcessDocument("Invoice.pdf");
+
+        // Usage B: Override Property with PhotoPrinter
+        docService.Printer = new PhotoPrinter(); // 👈 Injected via Property!
+        docService.ProcessDocument("FamilyPhoto.jpg");
+    }
+}
 ```
 
 ---
 
-## 🎯 3. Top 3 Reasons Why We Use DI
+## 3️⃣ Method Injection
 
-1. **Open-Closed Principle:** Add new devices without changing `AudioPlayerService.cs`.
-2. **Memory Efficiency:** Creates and uses only the 1 required object in RAM.
-3. **Easy Unit Testing:** Inject a fake test object into `AudioPlayerService` for fast offline testing.
+### 📖 Explanation:
+* **How it works:** The dependency is passed directly into a **method parameter**.
+* **When to use:** When a dependency is **only needed for 1 specific action**, not for the whole class.
+* **Analogy:** Think of a Printing Shop: The shop stays in one place (DocumentPrinter). When you go there, you hand over your USB Pen Drive (IPrinter) just for that 1 print job. The shop doesn't keep your Pen Drive forever!.
+
+### 💻 Full Code Example:
+```csharp
+using System;
+
+namespace CSharpLearningApp;
+
+public interface INotificationGateway
+{
+    void SendNotification(string message);
+}
+
+public class EmailGateway : INotificationGateway
+{
+    public void SendNotification(string message)
+    {
+        Console.WriteLine($"📧 Email Sent: {message}");
+    }
+}
+
+public class SmsGateway : INotificationGateway
+{
+    public void SendNotification(string message)
+    {
+        Console.WriteLine($"📱 SMS Sent: {message}");
+    }
+}
+
+public class UserAlertService
+{
+    // ✅ METHOD INJECTION: Injected directly into the method parameter!
+    public void SendAlert(string userMessage, INotificationGateway gateway)
+    {
+        gateway.SendNotification(userMessage);
+    }
+}
+
+// Program.cs:
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        UserAlertService alertService = new UserAlertService();
+
+        // Call 1: Inject EmailGateway into Method Call 1
+        alertService.SendAlert("Security Alert: New Login", new EmailGateway());
+
+        // Call 2: Inject SmsGateway into Method Call 2
+        alertService.SendAlert("Security OTP: 492103", new SmsGateway());
+    }
+}
+```
 
 ---
 
-## 🧠 4. The 1-Line Interview Answer
+## 📊 Summary Comparison of All 3 DI Types
+
+| Injection Type | Where is it passed? | Required or Optional? | Frequency |
+|---|---|---|---|
+| **1. Constructor Injection** | `new Service(dependency)` | **Mandatory** | ⭐ **95% (Standard)** |
+| **2. Property Injection** | `service.Property = dependency` | **Optional** (Has default) | ⚠️ Rare |
+| **3. Method Injection** | `service.Method(dependency)` | **Per Method Call** | 🛠️ Occasional |
+
+---
+
+## 🧠 Interview 1-Line Answer
 
 > *"We use Dependency Injection to make our classes loosely coupled, memory efficient, easy to extend without breaking existing code, and easy to unit test."*

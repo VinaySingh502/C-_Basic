@@ -206,3 +206,68 @@ public class Program
 ## 🧠 Interview 1-Line Answer
 
 > *"We use Dependency Injection to make our classes loosely coupled, memory efficient, easy to extend without breaking existing code, and easy to unit test."*
+------------------------
+
+Formula :- 
+Viewed ConstructorPractice.cs:38-62
+
+Here is a **3-Step Memory Formula** to make sure you NEVER forget Dependency Injection again:
+
+---
+
+## 🧠 The "S-P-C" Memory Formula
+
+Whenever you think of Dependency Injection, remember **S - P - C**:
+
+```
+S — Socket     (Interface & Constructor Parameter)
+P — Plug       (Concrete Helper Classes)
+C — Connect    (Passing it in Program.cs)
+```
+
+---
+
+### 1️⃣ S — Socket (The Interface & Constructor)
+You define what tool you need, but you **don't create it inside**. You just make a socket parameter:
+```csharp
+public class AudioPlayerService
+{
+    private readonly IAudioOutput _output;
+
+    // 🔌 THE SOCKET: Ask for the interface in constructor
+    public AudioPlayerService(IAudioOutput output) 
+    {
+        _output = output;
+    }
+}
+```
+
+---
+
+### 2️⃣ P — Plug (The Implementation Classes)
+Create the actual tools that plug into that socket:
+```csharp
+public class HeadphonesOutput : IAudioOutput { ... }
+public class BluetoothSpeakerOutput : IAudioOutput { ... }
+```
+
+---
+
+### 3️⃣ C — Connect (Program.cs)
+In `Program.cs`, create the plug and **connect it into the socket**:
+```csharp
+IAudioOutput headphones = new HeadphonesOutput();             // The Plug
+AudioPlayerService player = new AudioPlayerService(headphones); // Connected!
+```
+
+---
+
+## 🛑 The Golden Rule to Remember (The 1-Second Check):
+
+> **"If you see `new` inside a Service constructor — it is NOT Dependency Injection."**
+> **"If `new` is in `Program.cs` and passed into the Service constructor — IT IS Dependency Injection!"**
+
+If you ever forget during coding, just ask yourself:  
+**"Am I writing `new` inside my service class?"**  
+If YES $\rightarrow$ Stop, remove `new`, and add a constructor parameter instead! 💡
+

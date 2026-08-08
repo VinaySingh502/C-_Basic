@@ -208,7 +208,6 @@ public class Program
 > *"We use Dependency Injection to make our classes loosely coupled, memory efficient, easy to extend without breaking existing code, and easy to unit test."*
 ------------------------
 
-Formula :- 
 Viewed ConstructorPractice.cs:38-62
 
 Here is a **3-Step Memory Formula** to make sure you NEVER forget Dependency Injection again:

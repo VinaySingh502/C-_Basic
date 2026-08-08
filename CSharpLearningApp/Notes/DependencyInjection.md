@@ -195,6 +195,14 @@ public class Program
 
 ---
 
+## 🧠 Summary Table
+
+| Injection Type | Real-Life Analogy | When to use in C#? |
+|---|---|---|
+| **Constructor Injection** | Buying a Car with an Engine | Required tool (95% standard) |
+| **Property Injection** | Phone with Default Speaker (Headphones optional) | Optional tool with a default |
+| **Method Injection** | Handing a USB Pen Drive to a Print Shop | Temporary tool for 1 specific action |
+
 ## 🧠 Interview 1-Line Answer
 
 > *"We use Dependency Injection to make our classes loosely coupled, memory efficient, easy to extend without breaking existing code, and easy to unit test."*
